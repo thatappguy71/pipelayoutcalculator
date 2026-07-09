@@ -27,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.thatappguy.pipelayoutcalculator.ui.components.IntersectionInputDiagram
+import com.thatappguy.pipelayoutcalculator.ui.components.IntersectionWrapDiagram
 import kotlin.math.*
 
 // ==========================================
@@ -59,6 +61,25 @@ class MainActivity : ComponentActivity() {
 // 2. MAIN NAVIGATION & LAYOUT CONTAINER
 // ==========================================
 @Composable
+fun BrandHeader() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        PipeLayoutAppIcon(modifier = Modifier.size(120.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Pipe Layout Calculator",
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
 fun MainAppLayout() {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Intersection", "Miter Cut", "Rolling Offset")
@@ -66,22 +87,22 @@ fun MainAppLayout() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TabRow(
-                selectedTabIndex = selectedTab,
-                modifier = Modifier.statusBarsPadding()
-            ) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        text = { 
-                            Text(
-                                text = title, 
-                                fontSize = 14.sp, 
-                                fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal 
-                            ) 
-                        }
-                    )
+            Column(modifier = Modifier.statusBarsPadding()) {
+                BrandHeader()
+                TabRow(selectedTabIndex = selectedTab) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = { 
+                                Text(
+                                    text = title, 
+                                    fontSize = 14.sp, 
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal 
+                                ) 
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -121,11 +142,14 @@ fun IntersectionTab() {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Text("Pipe Intersection", style = MaterialTheme.typography.headlineSmall, color = Color.White)
+        Text("Pipe Intersection Calculator", style = MaterialTheme.typography.headlineSmall, color = Color.White)
         Spacer(modifier = Modifier.height(16.dp))
 
+        // --- 1. Static diagram defining definitions (Offset, Angle, etc.) ---
+        IntersectionInputDiagram()
+
         // Header Picker
-        Text("Header Pipe Size (NPS)", style = MaterialTheme.typography.labelLarge)
+        Text("Header Pipe Size (NPS)", style = MaterialTheme.typography.labelLarge, color = Color.Gray)
         ExposedDropdownMenuBox(
             expanded = headerExpanded,
             onExpandedChange = { headerExpanded = !headerExpanded }
@@ -145,7 +169,7 @@ fun IntersectionTab() {
         }
 
         // Branch Picker
-        Text("Branch Pipe Size (NPS)", style = MaterialTheme.typography.labelLarge)
+        Text("Branch Pipe Size (NPS)", style = MaterialTheme.typography.labelLarge, color = Color.Gray)
         ExposedDropdownMenuBox(
             expanded = branchExpanded,
             onExpandedChange = { branchExpanded = !branchExpanded }
@@ -204,16 +228,24 @@ fun IntersectionTab() {
             },
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
-            Text("Calculate Ordinates")
+            Text("Calculate Ordinates", fontWeight = FontWeight.Bold)
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // --- 2. Programmatic diagram showing how ordinates wrap ---
+        IntersectionWrapDiagram(
+            headerNps = selectedHeaderLabel,
+            branchNps = selectedBranchLabel,
+            angleDegrees = angleInput.toDoubleOrNull() ?: 90.0
+        )
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Results (16 Divisions)", style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Text("Layout Ordinates (16 Divisions)", style = MaterialTheme.typography.titleMedium, color = Color.White)
             val clipboard = LocalClipboardManager.current
             IconButton(onClick = { clipboard.setText(AnnotatedString(resultsText)) }) {
                 Icon(Icons.Default.ContentCopy, contentDescription = "Copy", tint = MaterialTheme.colorScheme.primary)
