@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest a calculator, workflow improvement, or field feature.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The best requests start with the field problem. Tell us what you are trying to do and why the current workflow is slow, awkward, or error-prone.
+
+  - type: input
+    id: role
+    attributes:
+      label: Trade / role
+      placeholder: e.g. pipefitter, welder, fabricator, apprentice
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: How do you handle it now?
+      description: Describe the current calculation or shop/field workflow.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like Pipe Layout Pro to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: What output would be useful?
+      placeholder: Measurements, station values, cut sheet, diagram, saved project, share/export, etc.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Add examples or non-confidential screenshots if helpful.
