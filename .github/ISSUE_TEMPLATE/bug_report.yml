@@ -1,0 +1,98 @@
+name: Bug report
+description: Report a crash, incorrect result, or other app problem.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Pipe Layout Pro. Please include enough detail to reproduce the problem.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: e.g. Pixel 8a
+    validations:
+      required: true
+
+  - type: input
+    id: android
+    attributes:
+      label: Android version
+      placeholder: e.g. Android 17
+    validations:
+      required: true
+
+  - type: dropdown
+    id: calculator
+    attributes:
+      label: Calculator / area
+      options:
+        - Trunnion Layout
+        - 45° Branch Layout
+        - 90° Branch Layout
+        - Miter Calculator
+        - Saddle Layout
+        - Saved Projects
+        - Settings / Units
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: units
+    attributes:
+      label: Measurement system
+      options:
+        - Imperial
+        - Metric
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs used
+      description: Enter the exact values used so the result can be reproduced.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Include the result shown, error message, crash, or other behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: For calculation issues, explain how you verified the expected value.
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or additional context
+      description: Drag screenshots here if they help. Do not upload confidential drawings or project information.
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Verification
+      options:
+        - label: I understand that fabrication measurements must be independently verified against applicable drawings, specifications, codes, and procedures.
+          required: true
